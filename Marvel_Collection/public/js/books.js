@@ -39,18 +39,17 @@ const deleteBook = (id) => {
         $.ajax({
             url: `/books/${id}`,
             type: 'DELETE',
-            success: (data) => {
+            success: () => {
                 window.location.reload();
-                $(`#books-list[data-id]=${id}`).remove();
             },
             error: (err) => {
                 console.log(err);
             }
-        })
-    }
-    $('#delete-book').on('click', e => {
+        });
+    };
+
+    $(document).on('click', '.delete-book', e => {
         const id = $(e.target).attr('data-id');
-        console.log(id);
         deleteBook(id);
     });
 

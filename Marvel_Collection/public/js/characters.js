@@ -35,19 +35,17 @@ const deleteCharacter = (id) => {
         $.ajax({
             url: `/characters/${id}`,
             type: 'DELETE',
-            success: (data) => {
+            success: () => {
                 window.location.reload();
-                $(`#characters-list[data-id]=${id}`).remove();
             },
             error: (err) => {
                 console.log(err);
             }
-        })
-    }
-    console.log("script is linked")
-    $('#delete-character').on('click', e => {
+        });
+    };
+
+    $(document).on('click', '.delete-character', e => {
         const id = $(e.target).attr('data-id');
-        console.log(id);
         deleteCharacter(id);
     });
 

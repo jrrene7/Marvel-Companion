@@ -34,7 +34,7 @@ app.use(express.static(__dirname + '/public'));
 
 // auth setup.
 app.use(session({
-  secret: 'keyboard cat',
+  secret: process.env.SESSION_SECRET || 'keyboard cat',
   resave: true,
   saveUninitialized: true
 }));
