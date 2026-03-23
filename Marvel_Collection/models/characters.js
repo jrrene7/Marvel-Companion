@@ -1,66 +1,88 @@
 const axios = require('axios');
 const db = require('../db/config');
 
+const SUPERHERO_API_URL = 'https://akabab.github.io/superhero-api/api/all.json';
 
-const TS = process.env.TS;
-const API_KEY = process.env.API_KEY;
-const HASH = process.env.HASH;
+let heroCache = null;
 
-const Characters = {}
-
-Characters.getCharacters = (request, response, next) => {
-	const name = request.body.input;
-	console.log('search input: ' + name);
-	const urlStr = `https://gateway.marvel.com:443/v1/public/characters?name=${name}&ts=${TS}&apikey=${API_KEY}&hash=${HASH}`;
-	console.log(urlStr);
-	axios.get(`https://gateway.marvel.com:443/v1/public/characters?name=${name}&ts=${TS}&apikey=${API_KEY}&hash=${HASH}`)
-	.then( nameData => {
-		response.locals.nameData = nameData.data.data.results;
-		next();
-	}).catch( err => {
-		console.error(`ERROR IN RETRIEVING NAME: ${err}`)
-	})
+async function getAllHeroes() {
+  if (heroCache) return heroCache;
+  const res = await axios.get(SUPERHERO_API_URL);
+  heroCache = res.data;
+  return heroCache;
 }
 
+const Characters = {};
+
+Characters.getCharacters = async (request, response, next) => {
+  const name = request.body.input.toLowerCase();
+  console.log('search input: ' + name);
+
+  try {
+    const allHeroes = await getAllHeroes();
+    const results = allHeroes
+      .filter(hero =>
+        hero.biography.publisher === 'Marvel Comics' &&
+        hero.name.toLowerCase().includes(name)
+      )
+      .map(hero => {
+        const imgUrl = hero.images.md;
+        const lastDot = imgUrl.lastIndexOf('.');
+        const descParts = [
+          hero.biography.fullName ? `Real name: ${hero.biography.fullName}` : '',
+          hero.biography.firstAppearance ? `First appearance: ${hero.biography.firstAppearance}` : '',
+          hero.biography.alignment ? `Alignment: ${hero.biography.alignment}` : ''
+        ].filter(Boolean);
+
+        return {
+          id: hero.id,
+          name: hero.name,
+          description: descParts.join(' | '),
+          thumbnail: {
+            path: imgUrl.substring(0, lastDot),
+            extension: imgUrl.substring(lastDot + 1)
+          }
+        };
+      });
+
+    response.locals.nameData = results;
+    next();
+  } catch (err) {
+    console.error(`ERROR RETRIEVING CHARACTER: ${err}`);
+    next(err);
+  }
+};
+
 Characters.saveSearch = (character, user_id) => {
-	console.log('====>', character)
-	 const {name, description, thumbnail} = character;
-	// const character = request.body.data.results;
-	return db.one('INSERT INTO characters (name, description, thumbnail, user_id) VALUES ($1, $2, $3, $4) RETURNING *', 
-		[name, description, thumbnail, user_id])
-	// .then(() => {
-	// 	// response.locals.characterData = characterData;
-	// 	// console.log(characterData);
-	// 	next();
-	// })
+  const { name, description, thumbnail } = character;
+  return db.one(
+    'INSERT INTO characters (name, description, thumbnail, user_id) VALUES ($1, $2, $3, $4) RETURNING *',
+    [name, description, thumbnail, user_id]
+  );
 };
 
 Characters.getFavorites = (user_id) => {
-	return db.any(`SELECT * FROM characters WHERE user_id = $1`, user_id);
+  return db.any('SELECT * FROM characters WHERE user_id = $1', user_id);
 };
 
-
 Characters.updateFavorite = (req, res, next) => {
-  // const {user_id, character_id} = res.locals.userCharacter;
-  const {id} = req.params;
-  db.oneOrNone(`UPDATE characters SET
-    name = $1, decription = $2, thumbnail = $3
-    WHERE id = $4 RETURNING *`,
-    [name, discription, thumbnail, id])
+  const { id } = req.params;
+  db.oneOrNone(
+    'UPDATE characters SET name = $1, description = $2, thumbnail = $3 WHERE id = $4 RETURNING *',
+    [name, description, thumbnail, id]
+  )
     .then(userCharacter => {
       res.locals.userCharacter = userCharacter;
       next();
     })
     .catch(err => console.log(err));
-   };
+};
 
 Characters.deleteFavorite = (request, response, next) => {
-  const {id} = request.params;
-  db.none(`DELETE FROM characters WHERE id = $1`, id)
-  .then(()=> next())
-  .catch(err => console.log(err));
-}
-
-
+  const { id } = request.params;
+  db.none('DELETE FROM characters WHERE id = $1', id)
+    .then(() => next())
+    .catch(err => console.log(err));
+};
 
 module.exports = Characters;
