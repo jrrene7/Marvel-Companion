@@ -1,43 +1,43 @@
 <!DOCTYPE html>
-<html lang='en'>
+<html lang="en">
 <head>
-  <meta charset='UTF-8' />
-  <meta name='viewport' content='width=device-width, initial-scale=1.0' />
-  <meta http-equiv='X-UA-Compatible' content='ie=edge' />
-
-  <title>COMIC BOOKS</title>
- <link rel='stylesheet' href='/css/showbooks.css'>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/skeleton/2.0.4/skeleton.css">
-  <script src="./public/js/jquery.js"></script>
-  <script src="./public/js/books.js"></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Comic Results — Marvel Companion</title>
+  <link rel="stylesheet" href="/css/showbooks.css">
 </head>
 <body>
- 
-   {{#books}}
-  <div class="books">
+  <nav class="navbar">
+    <a href="/home" class="navbar-brand">Marvel Companion</a>
+    <div class="nav-links">
+      <a href="/books/search">Search Again</a>
+      <a href="/user/logout">Logout</a>
+    </div>
+  </nav>
 
-     <form action="/books/home" method="POST">
-        <input type="hidden" value="{{thumbnail.path}}.{{thumbnail.extension}}" name="thumbnail">
-        <input type="hidden" value="{{id}}" name="id">
-        <input type="hidden" value="{{title}}" name="title">
-        <input type="hidden" value="{{description}}" name="description">
-<div>
-<img src="{{thumbnail.path}}.{{thumbnail.extension}}" alt="">
-</div>
-
-    <div>{{title}}</div>
-    <div>{{description}}</div>
-    <div>{{prices}}</div>
-    <button>Favorite</button>
-</form>
+  <div class="results-header">
+    <h2>Search Results</h2>
   </div>
-  {{/books}}
-<!-- 
-<button>Favorite</button>
-</form> -->
-<button><a href="/books/Search">Back</a></button>
 
-  <!-- logout to index.html (landing page) -->
-  <a href="/" class="logout">Logout</a> 
+  <div class="results-grid">
+    {{#books}}
+    <div class="card">
+      <a href="/books/{{id}}" class="card-link">
+        <img src="{{thumbnail.path}}.{{thumbnail.extension}}" alt="{{title}}">
+      </a>
+      <div class="card-body">
+        <a href="/books/{{id}}" class="card-title-link"><h3>{{title}}</h3></a>
+        <p>{{description}}</p>
+        <form action="/books/home" method="POST">
+          <input type="hidden" value="{{thumbnail.path}}.{{thumbnail.extension}}" name="thumbnail">
+          <input type="hidden" value="{{id}}" name="id">
+          <input type="hidden" value="{{title}}" name="title">
+          <input type="hidden" value="{{description}}" name="description">
+          <button type="submit" class="btn-favorite">+ Favorite</button>
+        </form>
+      </div>
+    </div>
+    {{/books}}
+  </div>
 </body>
 </html>

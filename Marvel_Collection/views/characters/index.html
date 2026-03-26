@@ -1,36 +1,26 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-	<meta charset="UTF-8">
-	<link rel='stylesheet' href='/css/charactersearch.css'>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/skeleton/2.0.4/skeleton.css">
-
-	<title>Characters</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Character Search — Marvel Companion</title>
+  <link rel="stylesheet" href="/css/charactersearch.css">
 </head>
 <body>
-	<h1>Search for a character</h1>	
+  <nav class="navbar">
+    <a href="/home" class="navbar-brand">Marvel Companion</a>
+    <div class="nav-links">
+      <a href="/characters/home">Favorites</a>
+      <a href="/user/logout">Logout</a>
+    </div>
+  </nav>
 
-
-   <form action="/characters/show" method="POST">
- <input placeholder="Enter Name" name="input" type="text"/>
-      <input type="submit" value="Search">
-   </form>
-
-   <!-- {{#characters}}
-	<div>
-		<div name="image"><img src="{{thumbnail.path}}.{{thumbnail.extension}}" alt=""></div>
-		<div>{{id}}</div>
-		<div>{{name}}</div>
-		<div>{{description}}</div>
- -</div>
-	{{/characters}}
-
-	<button>Favorite</button> -->
-<button class="button-primary"><a href="/home">Back</a></button>
-
-	<!-- logout to index.html (landing page) -->
-	<button class="button-primary"><a href="/" class="logout">Logout</a></button> 
-
-
+  <div class="search-container">
+    <h1>Search Characters</h1>
+    <form action="/characters/show" method="POST">
+      <input type="text" placeholder="Enter character name..." name="input" autofocus>
+      <button type="submit" class="btn-primary">Search</button>
+    </form>
+  </div>
 </body>
 </html>

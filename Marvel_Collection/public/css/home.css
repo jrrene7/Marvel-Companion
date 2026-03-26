@@ -1,41 +1,173 @@
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
 body {
-	background-size: 70vw 100vh;
-	background-repeat: no-repeat; 
-	background-position: center top;
-	padding-top: ;
-	background-image: url("../images/spiderman-vs-wolverine.jpg");
-
+  min-height: 100vh;
+  font-family: 'Helvetica Neue', Arial, sans-serif;
+  background: url('../images/spiderman-vs-wolverine.jpg') center/cover no-repeat fixed;
+  background-color: #111;
+  color: #f0f0f0;
 }
 
-
-
-#characters-section {
-float: left;
-border: 
-width: 40vw;
-background-color: gray;
-opacity: 1;
-
+/* Navbar */
+.navbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.85rem 2rem;
+  background: rgba(0, 0, 0, 0.9);
+  border-bottom: 2px solid #e23636;
+  position: sticky;
+  top: 0;
+  z-index: 100;
 }
 
-#characters-list {
-	width: 40vw;
+.navbar-brand {
+  font-size: 1.25rem;
+  font-weight: 900;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: #e23636;
 }
 
-img {
-	width: 425px;
-	height: 425px;
+.btn-nav {
+  color: #ccc;
+  text-decoration: none;
+  font-size: 0.85rem;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  border: 1px solid #555;
+  border-radius: 4px;
+  padding: 0.35rem 0.85rem;
 }
 
+.btn-nav:hover { border-color: #e23636; color: #e23636; }
 
-#books-section {
-
-	float: right;
-	width: 40vw;
-	background-color: gray;
-	opacity: 1;
+/* Layout */
+.page-wrapper {
+  display: flex;
+  gap: 0;
+  min-height: calc(100vh - 56px);
 }
 
-#books-list {
-	width: 40vw;
+.panel {
+  flex: 1;
+  padding: 1.5rem;
+  background: rgba(0, 0, 0, 0.78);
+  overflow-y: auto;
 }
+
+#characters-section { border-right: 1px solid #333; }
+
+/* Panel header */
+.panel-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1.25rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 1px solid #333;
+}
+
+.panel-header h2 {
+  font-size: 1.1rem;
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: #f0f0f0;
+}
+
+.btn-search {
+  font-size: 0.8rem;
+  color: #e23636;
+  text-decoration: none;
+  border: 1px solid #e23636;
+  border-radius: 4px;
+  padding: 0.3rem 0.7rem;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+
+.btn-search:hover { background: #e23636; color: #fff; }
+
+/* Cards */
+.card {
+  display: flex;
+  gap: 1rem;
+  background: rgba(30, 30, 30, 0.9);
+  border: 1px solid #333;
+  border-radius: 6px;
+  padding: 0.85rem;
+  margin-bottom: 1rem;
+}
+
+.card img {
+  width: 90px;
+  height: 90px;
+  object-fit: cover;
+  border-radius: 4px;
+  flex-shrink: 0;
+}
+
+.card-body {
+  flex: 1;
+  min-width: 0;
+}
+
+.card-body h3 {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: #f0f0f0;
+  margin-bottom: 0.3rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.card-body p {
+  font-size: 0.8rem;
+  color: #999;
+  line-height: 1.4;
+  margin-bottom: 0.6rem;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.btn-delete {
+  font-size: 0.75rem;
+  color: #e23636;
+  background: transparent;
+  border: 1px solid #e23636;
+  border-radius: 3px;
+  padding: 0.25rem 0.6rem;
+  cursor: pointer;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+
+.btn-delete:hover { background: #e23636; color: #fff; }
+
+/* Empty state */
+.empty-state {
+  padding: 2rem 1rem;
+  text-align: center;
+  color: #555;
+}
+
+.empty-state p { margin-bottom: 1rem; font-size: 0.9rem; }
+
+.btn-primary {
+  display: inline-block;
+  padding: 0.55rem 1.2rem;
+  background: #e23636;
+  color: #fff;
+  text-decoration: none;
+  border-radius: 4px;
+  font-size: 0.85rem;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+
+.btn-primary:hover { background: #c62828; }

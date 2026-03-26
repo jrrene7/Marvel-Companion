@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{{name}} — Marvel Companion</title>
+  <link rel="stylesheet" href="/css/characterdetail.css">
+</head>
+<body>
+  <nav class="navbar">
+    <a href="/home" class="navbar-brand">Marvel Companion</a>
+    <div class="nav-links">
+      <a href="javascript:history.back()">Back</a>
+      <a href="/characters/search">Search</a>
+      <a href="/user/logout">Logout</a>
+    </div>
+  </nav>
+
+  <div class="detail-layout">
+    <aside class="detail-sidebar">
+      <img src="{{image}}" alt="{{name}}" class="hero-image">
+      <form action="/characters/home" method="POST">
+        <input type="hidden" name="thumbnail" value="{{thumbnail_path}}.{{thumbnail_ext}}">
+        <input type="hidden" name="id" value="{{id}}">
+        <input type="hidden" name="name" value="{{name}}">
+        <input type="hidden" name="description" value="{{description}}">
+        <button type="submit" class="btn-favorite">+ Add to Favorites</button>
+      </form>
+    </aside>
+
+    <main class="detail-main">
+      <h1>{{name}}</h1>
+      <p class="real-name">{{fullName}}</p>
+
+      <section class="section">
+        <h2>Power Stats</h2>
+        <div class="stats">
+          <div class="stat">
+            <span class="stat-label">Intelligence</span>
+            <div class="stat-track"><div class="stat-bar" style="width:{{intelligence}}%"></div></div>
+            <span class="stat-val">{{intelligence}}</span>
+          </div>
+          <div class="stat">
+            <span class="stat-label">Strength</span>
+            <div class="stat-track"><div class="stat-bar" style="width:{{strength}}%"></div></div>
+            <span class="stat-val">{{strength}}</span>
+          </div>
+          <div class="stat">
+            <span class="stat-label">Speed</span>
+            <div class="stat-track"><div class="stat-bar" style="width:{{speed}}%"></div></div>
+            <span class="stat-val">{{speed}}</span>
+          </div>
+          <div class="stat">
+            <span class="stat-label">Durability</span>
+            <div class="stat-track"><div class="stat-bar" style="width:{{durability}}%"></div></div>
+            <span class="stat-val">{{durability}}</span>
+          </div>
+          <div class="stat">
+            <span class="stat-label">Power</span>
+            <div class="stat-track"><div class="stat-bar" style="width:{{power}}%"></div></div>
+            <span class="stat-val">{{power}}</span>
+          </div>
+          <div class="stat">
+            <span class="stat-label">Combat</span>
+            <div class="stat-track"><div class="stat-bar" style="width:{{combat}}%"></div></div>
+            <span class="stat-val">{{combat}}</span>
+          </div>
+        </div>
+      </section>
+
+      <div class="info-grid">
+        <section class="section">
+          <h2>Biography</h2>
+          <dl>
+            <dt>First Appearance</dt><dd>{{firstAppearance}}</dd>
+            <dt>Alignment</dt><dd class="align-{{alignment}}">{{alignment}}</dd>
+            <dt>Place of Birth</dt><dd>{{placeOfBirth}}</dd>
+          </dl>
+        </section>
+
+        <section class="section">
+          <h2>Appearance</h2>
+          <dl>
+            <dt>Gender</dt><dd>{{gender}}</dd>
+            <dt>Race</dt><dd>{{race}}</dd>
+            <dt>Height</dt><dd>{{height}}</dd>
+            <dt>Weight</dt><dd>{{weight}}</dd>
+            <dt>Eyes</dt><dd>{{eyeColor}}</dd>
+            <dt>Hair</dt><dd>{{hairColor}}</dd>
+          </dl>
+        </section>
+
+        <section class="section">
+          <h2>Work</h2>
+          <dl>
+            <dt>Occupation</dt><dd>{{occupation}}</dd>
+            <dt>Base</dt><dd>{{base}}</dd>
+          </dl>
+        </section>
+
+        <section class="section">
+          <h2>Connections</h2>
+          <dl>
+            <dt>Group Affiliation</dt><dd>{{groupAffiliation}}</dd>
+          </dl>
+        </section>
+      </div>
+    </main>
+  </div>
+</body>
+</html>

@@ -43,6 +43,17 @@ router.get('/home', auth.restrict, (request, response) => {
 //     response.json({userBook});
 //   });
 
+router.get('/:id', auth.restrict, async (req, res) => {
+  try {
+    const book = await Books.getBookById(req.params.id);
+    if (!book) return res.status(404).send('Book not found');
+    res.render('books/detail', book);
+  } catch (err) {
+    console.error(err);
+    res.status(500).send('Error loading book');
+  }
+});
+
 router.delete('/:id',
   Books.deleteFavorite,
   (request, response) => {

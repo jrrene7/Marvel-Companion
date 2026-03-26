@@ -6,13 +6,17 @@ const User = {};
 User.create = (user) => {
   const passwordDigest = bcrypt.hashSync(user.password, 10);
   return db.oneOrNone(
-    'INSERT INTO users (email, password_digest, thread_id) VALUES ($1, $2, $3) RETURNING *;',
+    'INSERT INTO users (email, password_digest, thread_id) VALUES (?, ?, ?) RETURNING *',
     [user.email, passwordDigest, '']
   );
 };
 
 User.findByEmail = (email) => {
-  return db.oneOrNone('SELECT * FROM users WHERE email = $1;', [email]);
+  return db.oneOrNone('SELECT * FROM users WHERE email = ?', [email]);
+};
+
+User.findById = (id) => {
+  return db.oneOrNone('SELECT * FROM users WHERE id = ?', [id]);
 };
 
 User.findByEmailMiddleware = (req, res, next) => {

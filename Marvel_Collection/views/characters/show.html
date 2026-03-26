@@ -1,55 +1,43 @@
 <!DOCTYPE html>
-<html lang='en'>
+<html lang="en">
 <head>
-  <meta charset='UTF-8' />
-  <meta name='viewport' content='width=device-width, initial-scale=1.0' />
-  <meta http-equiv='X-UA-Compatible' content='ie=edge' />
-  <title>Character</title>
-
-  <link rel='stylesheet' href='/css/showcharacters.css'>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/skeleton/2.0.4/skeleton.css">
-
-  <script src="./public/js/jquery.js"></script>
-  <script src="./public/js/books.js"></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Character Results — Marvel Companion</title>
+  <link rel="stylesheet" href="/css/showcharacters.css">
 </head>
 <body>
+  <nav class="navbar">
+    <a href="/home" class="navbar-brand">Marvel Companion</a>
+    <div class="nav-links">
+      <a href="/characters/search">Search Again</a>
+      <a href="/user/logout">Logout</a>
+    </div>
+  </nav>
 
+  <div class="results-header">
+    <h2>Search Results</h2>
+  </div>
+
+  <div class="results-grid">
     {{#characters}}
-  <div class="characters">
-      <form action="/characters/home" method="POST">
-        <input type="hidden" value="{{thumbnail.path}}.{{thumbnail.extension}}" name="thumbnail">
-        <input type="hidden" value="{{id}}" name="id">
-        <input type="hidden" value="{{name}}" name="name">
-        <input type="hidden" value="{{description}}" name="description">
-
-
-    <div name="image"><img src="{{thumbnail.path}}.{{thumbnail.extension}}" alt=""></div>
-    <div>{{id}}</div>
-    <div>{{name}}</div>
-    <div>{{description}}</div>
- -</div>
-
-<!--         <input placeholder="Enter Name" name="input" type="text">
- --><!--        <input type="submit" value="Search">
- -->  <button class="button-primary">Favorite</button>
-</form>
-  {{/characters}}
-
-<button><a href="/characters/Search">Back</a></button>
-
-  <!-- logout to index.html (landing page) -->
-  <button class="button-primary"><a href="/" class="logout">Logout</a></button> 
-<!--   <header>
-    <h1>Search for Characters</h1>
-  </header>
-  <div class="container">
-    <div class="search-container">
-      <label>Name:</label>
-      <input type="text" id="name" />
-      <button id="submit">Search</button>
+    <div class="card">
+      <a href="/characters/{{id}}" class="card-link">
+        <img src="{{thumbnail.path}}.{{thumbnail.extension}}" alt="{{name}}">
+      </a>
+      <div class="card-body">
+        <a href="/characters/{{id}}" class="card-title-link"><h3>{{name}}</h3></a>
+        <p>{{description}}</p>
+        <form action="/characters/home" method="POST">
+          <input type="hidden" value="{{thumbnail.path}}.{{thumbnail.extension}}" name="thumbnail">
+          <input type="hidden" value="{{id}}" name="id">
+          <input type="hidden" value="{{name}}" name="name">
+          <input type="hidden" value="{{description}}" name="description">
+          <button type="submit" class="btn-favorite">+ Favorite</button>
+        </form>
+      </div>
     </div>
-    <div id="result">
-    </div>
-  </div> -->
+    {{/characters}}
+  </div>
 </body>
 </html>

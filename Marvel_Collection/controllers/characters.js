@@ -53,6 +53,17 @@ router.get('/home', auth.restrict, (request, response) => {
 //     response.json({userCharacter})
 //   })
 
+router.get('/:id', auth.restrict, async (req, res) => {
+  try {
+    const character = await Characters.getById(req.params.id);
+    if (!character) return res.status(404).send('Character not found');
+    res.render('characters/detail', character);
+  } catch (err) {
+    console.error(err);
+    res.status(500).send('Error loading character');
+  }
+});
+
 router.delete('/:id',
   Characters.deleteFavorite,
   (request, response) => {

@@ -1,24 +1,20 @@
-<html>
-  <head>
-  
-<link rel='stylesheet' href='/css/style.css'>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/skeleton/2.0.4/skeleton.css">
-
-  </head>
-  <body>
-    <div class="login">
-      <h1 class="text-center">Marvel Companion</h1>
-      <form action="/user/login" method="post">
-        <input placeholder="username" name="user[email]" type="text"/>
-        <br/ >
-        <input placeholder="password" name="user[password]" type="password"/>
-        <br/ >
-        <input type="submit" value="Login" class="button-primary">
-      </form>
-
-      <div class="text-center">
-        <button class="button-primary"><a href="/user/new"><small>Sign Up</small></a></button>
-      </div>
-    </div>
-  </body>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Marvel Companion</title>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+  <div class="login-card">
+    <h1>Marvel Companion</h1>
+    <form action="/user/login" method="post">
+      <input placeholder="Email" name="user[email]" type="text">
+      <input placeholder="Password" name="user[password]" type="password">
+      <input type="submit" value="Login">
+    </form>
+    <a href="/user/new" class="btn-outline">Create Account</a>
+  </div>
+</body>
 </html>

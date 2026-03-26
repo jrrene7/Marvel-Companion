@@ -1,68 +1,70 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-	 <script src="/js/jquery.js" charset="utf-8"></script>
-   <script src="/js/books.js" charset="utf-8"></script>
-   <script src="/js/characters.js" charset="utf-8"></script>
-<link rel='stylesheet' href='/css/home.css'>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/skeleton/2.0.4/skeleton.css">
-	<meta charset="UTF-8">
-	<title>HOME</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Marvel Companion</title>
+  <link rel="stylesheet" href="/css/home.css">
+  <script src="/js/jQuery.js"></script>
+  <script src="/js/books.js"></script>
+  <script src="/js/characters.js"></script>
 </head>
 <body>
+  <nav class="navbar">
+    <span class="navbar-brand">Marvel Companion</span>
+    <a href="/user/logout" class="btn-nav">Logout</a>
+  </nav>
 
-	<div id="characters-section">
-	<div class="characters">
-		<a href="/characters/search">SEARCH FOR A CHARACTER</a>
-		<br/ >
-		<button class="button-primary"><a href="/characters/home">Favorite Characters</a></button>
-	</div>
-	<div id="characters-list">
-		{{#characters}}
-		<div id="character-thumbnail"><img src="{{thumbnail}}" alt=""></div>
-		<br/ >
-		<div id="character-name">{{name}}</div>
-		<br/ >
-		<div id="character-description">{{description}}</div>
-		<br/ >
+  <div class="page-wrapper">
+    <section class="panel" id="characters-section">
+      <div class="panel-header">
+        <h2>Characters</h2>
+        <a href="/characters/search" class="btn-search">+ Search</a>
+      </div>
+      <div id="characters-list">
+        {{#characters}}
+        <div class="card">
+          <img src="{{thumbnail}}" alt="{{name}}">
+          <div class="card-body">
+            <h3>{{name}}</h3>
+            <p>{{description}}</p>
+            <button class="delete-character btn-delete" data-id={{id}}>Delete</button>
+          </div>
+        </div>
+        {{/characters}}
+        {{^characters}}
+        <div class="empty-state">
+          <p>No favorite characters yet.</p>
+          <a href="/characters/search" class="btn-primary">Search Characters</a>
+        </div>
+        {{/characters}}
+      </div>
+    </section>
 
-	<button class="delete-character button-primary" data-id={{id}}>DELETE</button>
-	
-
-		<br/ >
-		<br/ >
-		{{/characters}}
-	</div>
-</div>
-
-<br/ >
-
-<div id="books-section">
-<div class="books">
-	<a href="/books/search">SEARCH FOR COMIC BOOKS</a>
-	<br/ >
-	<button class="button-primary"><a href="/books/home">Favorite Books</a></button>
-	</div>
-	<br />
-	<div id="books-list">
-		{{#books}}
-		<br/ >
-		<img src="{{thumbnail}}" alt="">
-		<br/ >
-		{{title}}
-		<br/ >
-		{{description}}
-		<br/ >
-
-<button class="delete-book button-primary" data-id={{id}}>DELETE</button>
-		<br/ >
-		{{/books}}
-		
-	</div>
-</div>
-<br/ >
-<br/ >
-	<button class="button-primary"><a href="/user/logout" class="logout">Logout</a></button>
-
+    <section class="panel" id="books-section">
+      <div class="panel-header">
+        <h2>Comic Books</h2>
+        <a href="/books/search" class="btn-search">+ Search</a>
+      </div>
+      <div id="books-list">
+        {{#books}}
+        <div class="card">
+          <img src="{{thumbnail}}" alt="{{title}}">
+          <div class="card-body">
+            <h3>{{title}}</h3>
+            <p>{{description}}</p>
+            <button class="delete-book btn-delete" data-id={{id}}>Delete</button>
+          </div>
+        </div>
+        {{/books}}
+        {{^books}}
+        <div class="empty-state">
+          <p>No favorite comics yet.</p>
+          <a href="/books/search" class="btn-primary">Search Comics</a>
+        </div>
+        {{/books}}
+      </div>
+    </section>
+  </div>
 </body>
 </html>

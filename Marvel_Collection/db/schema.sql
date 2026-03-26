@@ -1,49 +1,35 @@
-
-DROP DATABASE marvel_companion;
-CREATE DATABASE marvel_companion;
-
-DROP TABLE IF EXISTS users;
-DROP TABLE IF EXISTS characters;
-DROP TABLE IF EXISTS books;
-DROP TABLE IF EXISTS user_books;
-DROP TABLE IF EXISTS user_characters;
-
-\c marvel_companion;
-
-CREATE TABLE users (
-  id BIGSERIAL PRIMARY KEY,
-  email VARCHAR NOT NULL UNIQUE,
-  password_digest VARCHAR NOT NULL,
-  thread_id VARCHAR NOT NULL
+CREATE TABLE IF NOT EXISTS users (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  email TEXT NOT NULL UNIQUE,
+  password_digest TEXT NOT NULL,
+  thread_id TEXT NOT NULL DEFAULT ''
 );
 
-CREATE TABLE characters (
-  id SERIAL PRIMARY KEY,
-  name VARCHAR,
-  description VARCHAR,
-  thumbnail VARCHAR,
+CREATE TABLE IF NOT EXISTS characters (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  name TEXT,
+  description TEXT,
+  thumbnail TEXT,
   user_id INTEGER
 );
 
-
-CREATE TABLE books (
-  id SERIAL PRIMARY KEY,
-  title VARCHAR,
-  thumbnail VARCHAR,
-  description VARCHAR,
-	price INTEGER,
+CREATE TABLE IF NOT EXISTS books (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  title TEXT,
+  thumbnail TEXT,
+  description TEXT,
+  price INTEGER,
   user_id INTEGER
 );
 
-CREATE TABLE user_books (
-	id SERIAL PRIMARY KEY,
-	user_id INTEGER REFERENCES users(id),
-	book_id INTEGER REFERENCES books(id)
-	);
+CREATE TABLE IF NOT EXISTS user_books (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  user_id INTEGER REFERENCES users(id),
+  book_id INTEGER REFERENCES books(id)
+);
 
-CREATE TABLE user_characters (
-	id SERIAL PRIMARY KEY,
-	user_id INTEGER REFERENCES users(id),
-	characters_id INTEGER REFERENCES characters(id)
-	);
-
+CREATE TABLE IF NOT EXISTS user_characters (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  user_id INTEGER REFERENCES users(id),
+  characters_id INTEGER REFERENCES characters(id)
+);

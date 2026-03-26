@@ -38,7 +38,7 @@ Books.saveSearch = (book, user_id) => {
 	console.log('====>', book)
 	 const {title, description, thumbnail} = book;
 	// const character = request.body.data.results;
-	return db.one('INSERT INTO books (title, description, thumbnail, user_id) VALUES ($1, $2, $3, $4) RETURNING *', 
+	return db.one('INSERT INTO books (title, description, thumbnail, user_id) VALUES (?, ?, ?, ?) RETURNING *',
 		[title, description, thumbnail, user_id])
 	// .then(() => {
 	// 	// response.locals.characterData = characterData;
@@ -48,7 +48,7 @@ Books.saveSearch = (book, user_id) => {
 };
 
 Books.getFavorites = (user_id) => {
-	return db.any(`SELECT * FROM books WHERE user_id = $1`, user_id);
+	return db.any('SELECT * FROM books WHERE user_id = ?', [user_id]);
 }
 
 // Books.updateFavorite = (req, res, next) => {
@@ -65,9 +65,43 @@ Books.getFavorites = (user_id) => {
 //     .catch(err => console.log(err));
 // };
 
+Books.getBookById = async (id) => {
+  const res = await axios.get(
+    `https://gateway.marvel.com:443/v1/public/comics/${id}?ts=${TS}&apikey=${API_KEY}&hash=${HASH}`
+  );
+  const comic = res.data.data.results[0];
+  if (!comic) return null;
+
+  const onsale = comic.dates.find(d => d.type === 'onsaleDate');
+  const saleDate = onsale
+    ? new Date(onsale.date).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })
+    : '—';
+
+  const printPrice = comic.prices.find(p => p.type === 'printPrice');
+  const price = printPrice && printPrice.price > 0 ? `$${printPrice.price.toFixed(2)}` : '—';
+
+  const detailUrl = (comic.urls.find(u => u.type === 'detail') || {}).url || null;
+
+  return {
+    id: comic.id,
+    title: comic.title,
+    description: comic.description || 'No description available.',
+    thumbnail: `${comic.thumbnail.path}.${comic.thumbnail.extension}`,
+    pageCount: comic.pageCount > 0 ? comic.pageCount : '—',
+    saleDate,
+    price,
+    detailUrl,
+    creators: comic.creators.items.map(c => ({
+      name: c.name,
+      role: c.role.charAt(0).toUpperCase() + c.role.slice(1)
+    })),
+    characters: comic.characters.items.map(c => ({ name: c.name })),
+  };
+};
+
 Books.deleteFavorite = (request, response, next) => {
   const {id} = request.params;
-  db.none(`DELETE FROM books WHERE id = $1`, id)
+  db.none('DELETE FROM books WHERE id = ?', [id])
   .then(()=> next())
   .catch(err => console.log(err));
 };

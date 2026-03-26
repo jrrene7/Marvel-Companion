@@ -14,7 +14,6 @@ authObject.passportInstance = passport.initialize();
 authObject.passportSession = passport.session();
 
 authObject.restrict = function restrict(req, res, next) {
-  console.log('in auth.restrict. req.isAuthenticated():', req.isAuthenticated());
   if (req.isAuthenticated()) {
     next();
   } else if (req.method === 'POST') {
@@ -29,22 +28,18 @@ authObject.restrict = function restrict(req, res, next) {
 // We can then retrieve that information during the next request phase in req.deserializeUser
 // Here we're not actually doing anything beyond storing the normal user data, however.
 passport.serializeUser((user, done) => {
-  console.log('in passport.serializeUser. user:', user);
-  done(null, user);
+  done(null, user.id);
 });
 
 // Given an object representing our user (obtained from the session),
 // how shall we define any other user information we'll need in our
 // routes, conveniently accessible as req.user in routes?
-passport.deserializeUser((userObj, done) => {
-  console.log('in passport.deserializeUser. userObj: ', userObj);
+passport.deserializeUser((id, done) => {
   User
-    .findByEmail(userObj.email)
-    .then(user => {
-      done(null, user); // updates us to current database values
-    })
+    .findById(id)
+    .then(user => done(null, user || false))
     .catch(err => {
-      console.log('ERROR in deserializeUser:', err);
+      console.error('ERROR in deserializeUser:', err);
       done(null, false);
     });
 });
@@ -91,7 +86,6 @@ passport.use(
           // bcrypt.compareSync rehashes the password and sees if it matches user.password_digest,
           // returning true if there's a match and false otherwise.
           const isAuthed = bcrypt.compareSync(password, user.password_digest);
-          console.log('isAuthed:', isAuthed);
           if (isAuthed) {
             // Signals that we're logged in.
             // The second argument will get further processed by passport.serializeUser.

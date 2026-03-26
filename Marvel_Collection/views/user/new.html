@@ -1,21 +1,22 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
- <!--  <link rel="stylesheet" type="text/css" href="/css/style.css"> -->
- <link rel='stylesheet' href='/css/new.css'>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/skeleton/2.0.4/skeleton.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sign Up — Marvel Companion</title>
+  <link rel="stylesheet" href="/css/new.css">
 </head>
 <body>
-  <div>
+  <div class="login-card">
+    <h1>Create Account</h1>
     <form action="/user" method="POST">
       <label for="email">Email</label>
-      <input id="email" type="text" name="user[email]" placeholder="email"><br>
-
+      <input id="email" type="text" name="user[email]" placeholder="you@example.com">
       <label for="password">Password</label>
-      <input id="password" type="password" name="user[password]" placeholder="password"><br>
-
-      <input type="submit" value="Sign Up" class="button-primary">
+      <input id="password" type="password" name="user[password]" placeholder="Password">
+      <input type="submit" value="Sign Up">
     </form>
+    <a href="/" class="btn-outline">Back to Login</a>
   </div>
 </body>
 </html>
