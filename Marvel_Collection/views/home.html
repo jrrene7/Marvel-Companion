@@ -26,8 +26,7 @@
 		<div id="character-description">{{description}}</div>
 		<br/ >
 
-	<button id="edit-character" data-id={{id}} class="button-primary"><a href="home/edit">EDIT</a></button>
-		<button id="delete-character" data-id={{id}} class="button-primary">DELETE</button>
+	<button class="delete-character button-primary" data-id={{id}}>DELETE</button>
 	
 
 		<br/ >
@@ -55,10 +54,7 @@
 		{{description}}
 		<br/ >
 
-<button id="edit-book" data-id={{id}} class="button-primary">EDIT</button>
-
-<button  id="delete-book" data-id={{id}} class="button-primary">DELETE
-</button>
+<button class="delete-book button-primary" data-id={{id}}>DELETE</button>
 		<br/ >
 		{{/books}}
 		
@@ -66,7 +62,7 @@
 </div>
 <br/ >
 <br/ >
-	<button class="button-primary"><a href="/" class="logout">Logout</a></button> 
+	<button class="button-primary"><a href="/user/logout" class="logout">Logout</a></button>
 
 </body>
 </html>

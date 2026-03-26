@@ -7,36 +7,34 @@ const passport = require('passport');
 
 
 
-router.get('/search', 
-		//auth.restrict, 
-		//Characters.getCharacters, 
+router.get('/search',
+		auth.restrict,
 		(request, response) =>{
-				response.render('characters/index', response.locals.nameData);	
+				response.render('characters/index', response.locals.nameData);
 });
 
-router.post('/show', 
-		//auth.restrict, 
-		Characters.getCharacters, 
+router.post('/show',
+		auth.restrict,
+		Characters.getCharacters,
 		(request, response) =>{
-				console.log(response.locals.nameData);
-				// response.send("post");
-				response.render('characters/show', {characters: response.locals.nameData});	
+				response.render('characters/show', {characters: response.locals.nameData});
 });
 
-router.post('/home', (request, response) => {
-	console.log('====>', request.user.id)
+router.post('/home', auth.restrict, (request, response) => {
      Characters.saveSearch({
-     	name: request.body.name, 
-     	description: request.body.description, 
+     	name: request.body.name,
+     	description: request.body.description,
      	thumbnail: request.body.thumbnail}, request.user.id)
-     .then(response.redirect('/characters/home'))
+     .then(() => response.redirect('/characters/home'))
+     .catch(err => console.error(err));
   });
 
-router.get('/home', (request, response) => {
-	     	Characters.getFavorites(request.user.id)
+router.get('/home', auth.restrict, (request, response) => {
+     	Characters.getFavorites(request.user.id)
      	.then((characters) => {
      		    response.render('home', {characters});
      	})
+     	.catch(err => console.error(err));
 })
 
 // router.get('/home/edit',

@@ -4,7 +4,6 @@ const express = require('express');
 const app = express();
 const port = process.env.PORT || 3000;
 
-const bodyParser = require('body-parser');
 const mustacheExpress = require('mustache-express');
 
 const logger = require('morgan');
@@ -22,8 +21,8 @@ const booksController = require('./controllers/books');
 const userController = require('./controllers/user');
 
 
-app.use(bodyParser.urlencoded({ extended: true }));
-app.use(bodyParser.json());
+app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
 
 // view setup.
 app.engine('html', mustacheExpress());
@@ -35,7 +34,7 @@ app.use(express.static(__dirname + '/public'));
 
 // auth setup.
 app.use(session({
-  secret: 'keyboard cat',
+  secret: process.env.SESSION_SECRET || 'keyboard cat',
   resave: true,
   saveUninitialized: true
 }));

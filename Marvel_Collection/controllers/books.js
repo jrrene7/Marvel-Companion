@@ -6,37 +6,34 @@ const User = require('../models/user');
 const passport = require('passport');
 
 
-router.get('/search', 
-		//auth.restrict, 
-		//Characters.getCharacters, 
+router.get('/search',
+		auth.restrict,
 		(request, response) =>{
-				response.render('books/index', response.locals.titleData);	
+				response.render('books/index', response.locals.titleData);
 });
 
-router.post('/show', 
-		//auth.restrict, 
-		Books.getBooks, 
+router.post('/show',
+		auth.restrict,
+		Books.getBooks,
 		(request, response) =>{
-				console.log(response.locals.titleData);
-				// response.send("post");
-				response.render('books/show', {books: response.locals.titleData});	
+				response.render('books/show', {books: response.locals.titleData});
 });
 
-
-router.post('/home', (request, response) => {
-	console.log('====>', request.user.id)
+router.post('/home', auth.restrict, (request, response) => {
      Books.saveSearch({
-     	title: request.body.title, 
-     	description: request.body.description, 
+     	title: request.body.title,
+     	description: request.body.description,
      	thumbnail: request.body.thumbnail}, request.user.id)
-     .then(response.redirect('/books/home'))
+     .then(() => response.redirect('/books/home'))
+     .catch(err => console.error(err));
   });
 
-router.get('/home', (request, response) => {
-	     	Books.getFavorites(request.user.id)
+router.get('/home', auth.restrict, (request, response) => {
+     	Books.getFavorites(request.user.id)
      	.then((books) => {
      		    response.render('home', {books});
      	})
+     	.catch(err => console.error(err));
 })
 
 // router.put('/:id',
