@@ -2,23 +2,39 @@ const axios = require('axios');
 const db = require('../db/config');
 
 
-const TS = process.env.TS;
-const API_KEY = process.env.API_KEY;
-const HASH = process.env.HASH;
+const COMIC_VINE_KEY = process.env.COMIC_VINE_API_KEY;
+const COMIC_VINE_BASE = 'https://comicvine.gamespot.com/api';
+
+function stripHtml(html) {
+  if (!html) return '';
+  return html.replace(/<[^>]*>/g, '').replace(/&amp;/g, '&').replace(/&lt;/g, '<').replace(/&gt;/g, '>').trim();
+}
 
 const Books = {}
 
 Books.getBooks = (request, response, next) => {
-	const title = request.body.input;
-	const urlStr = `https://gateway.marvel.com:443/v1/public/comics?dateDescriptor=thisMonth&titleStartsWith=${title}&limit=20&ts=${TS}&apikey=${API_KEY}&hash=${HASH}`;
-	console.log(urlStr);
-	axios.get(`https://gateway.marvel.com:443/v1/public/comics?dateDescriptor=thisMonth&titleStartsWith=${title}&limit=20&ts=${TS}&apikey=${API_KEY}&hash=${HASH}`)
-	.then( titleData => {
-		response.locals.titleData = titleData.data.data.results;
-		next()
-	}).catch( err => {
-		console.error(`ERROR IN RETRIEVING TITLE: ${err}`)
-	})
+  const title = request.body.input;
+  axios.get(`${COMIC_VINE_BASE}/search/`, {
+    params: {
+      api_key: COMIC_VINE_KEY,
+      format: 'json',
+      query: title,
+      resources: 'volume',
+      field_list: 'id,name,deck,image',
+      limit: 20
+    }
+  })
+  .then(res => {
+    const results = (res.data.results || []).map(item => ({
+      id: item.id,
+      title: item.name || 'Unknown Title',
+      description: item.deck || '',
+      thumbnail: item.image ? item.image.medium_url : null,
+    }));
+    response.locals.titleData = results;
+    next();
+  })
+  .catch(err => console.error(`ERROR IN RETRIEVING TITLE: ${err}`));
 };
 
 // Books.saveSeach = (request, response, next) => {
@@ -66,36 +82,30 @@ Books.getFavorites = (user_id) => {
 // };
 
 Books.getBookById = async (id) => {
-  const res = await axios.get(
-    `https://gateway.marvel.com:443/v1/public/comics/${id}?ts=${TS}&apikey=${API_KEY}&hash=${HASH}`
-  );
-  const comic = res.data.data.results[0];
-  if (!comic) return null;
-
-  const onsale = comic.dates.find(d => d.type === 'onsaleDate');
-  const saleDate = onsale
-    ? new Date(onsale.date).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })
-    : '—';
-
-  const printPrice = comic.prices.find(p => p.type === 'printPrice');
-  const price = printPrice && printPrice.price > 0 ? `$${printPrice.price.toFixed(2)}` : '—';
-
-  const detailUrl = (comic.urls.find(u => u.type === 'detail') || {}).url || null;
+  const res = await axios.get(`${COMIC_VINE_BASE}/volume/4050-${id}/`, {
+    params: {
+      api_key: COMIC_VINE_KEY,
+      format: 'json',
+      field_list: 'id,name,deck,description,image,start_year,count_of_issues,publisher,person_credits,character_credits,site_detail_url'
+    }
+  });
+  const v = res.data.results;
+  if (!v) return null;
 
   return {
-    id: comic.id,
-    title: comic.title,
-    description: comic.description || 'No description available.',
-    thumbnail: `${comic.thumbnail.path}.${comic.thumbnail.extension}`,
-    pageCount: comic.pageCount > 0 ? comic.pageCount : '—',
-    saleDate,
-    price,
-    detailUrl,
-    creators: comic.creators.items.map(c => ({
-      name: c.name,
-      role: c.role.charAt(0).toUpperCase() + c.role.slice(1)
+    id: v.id,
+    title: v.name || 'Unknown Title',
+    description: stripHtml(v.description) || v.deck || 'No description available.',
+    thumbnail: v.image ? v.image.super_url || v.image.medium_url : null,
+    pageCount: v.count_of_issues || '—',
+    saleDate: v.start_year || '—',
+    price: '—',
+    detailUrl: v.site_detail_url || null,
+    creators: (v.person_credits || []).map(p => ({
+      name: p.name,
+      role: p.role ? p.role.charAt(0).toUpperCase() + p.role.slice(1) : 'Creator'
     })),
-    characters: comic.characters.items.map(c => ({ name: c.name })),
+    characters: (v.character_credits || []).slice(0, 20).map(c => ({ name: c.name })),
   };
 };
 

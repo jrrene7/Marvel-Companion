@@ -23,13 +23,13 @@
     {{#books}}
     <div class="card">
       <a href="/books/{{id}}" class="card-link">
-        <img src="{{thumbnail.path}}.{{thumbnail.extension}}" alt="{{title}}">
+        <img src="{{thumbnail}}" alt="{{title}}">
       </a>
       <div class="card-body">
         <a href="/books/{{id}}" class="card-title-link"><h3>{{title}}</h3></a>
         <p>{{description}}</p>
         <form action="/books/home" method="POST">
-          <input type="hidden" value="{{thumbnail.path}}.{{thumbnail.extension}}" name="thumbnail">
+          <input type="hidden" value="{{thumbnail}}" name="thumbnail">
           <input type="hidden" value="{{id}}" name="id">
           <input type="hidden" value="{{title}}" name="title">
           <input type="hidden" value="{{description}}" name="description">
